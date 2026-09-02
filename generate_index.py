@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """List every review/html/*.html (C01 and X01 alike). No extra packages."""
+import json
 import re
 from pathlib import Path
 
@@ -18,6 +19,21 @@ META = {
 
 
 def heading(path: Path) -> str:
+    cid = path.stem
+    model_p = HERE / "normalized" / "document-model" / f"{cid}.json"
+    if model_p.exists():
+        try:
+            model = json.loads(model_p.read_text(encoding="utf-8"))
+            code = model.get("stock_code") or ""
+            company = model.get("company") or ""
+            title = model.get("announcement_title") or ""
+            if code and company and not str(company).startswith(tuple("0123456789abcdef")):
+                label = f"{code} {company}"
+                if title:
+                    label += f" · {str(title)[:36]}"
+                return label
+        except Exception:
+            pass
     text = path.read_text(encoding="utf-8", errors="ignore")[:8000]
     m = re.search(r"<h1>(.*?)</h1>", text, re.S)
     if not m:

@@ -16,6 +16,7 @@ from harvest import (
     EXTRACTOR_VERSION,
     FIELD_SCHEMA_VERSION,
 )
+from harvest.identity import infer_from_model
 from harvest.match import harvest
 from harvest.normalize import extract_document, sha256_bytes
 from harvest.resources import BatchGate, ResourceGuard, sample_cpu_util
@@ -201,6 +202,18 @@ def harvest_one(rec: dict[str, Any], run_id: str, warm: bool = False) -> dict[st
     cpu0 = sample_cpu_util(0.08)
     path = rec["source_path"]
     model = extract_document(path)
+    ident = infer_from_model(model)
+    if ident.get("stock_code") and rec.get("stock_code") in (None, "unknown"):
+        rec["stock_code"] = ident["stock_code"]
+    if ident.get("company") and (
+        rec.get("company") in (None, "unknown") or str(rec.get("company", "")).startswith(tuple("0123456789abcdef"))
+    ):
+        rec["company"] = ident["company"]
+    elif ident.get("company") and rec.get("company") and len(str(rec.get("company"))) >= 16:
+        rec["company"] = ident["company"]
+    if ident.get("title_hint") and not rec.get("announcement_title"):
+        rec["announcement_title"] = ident["title_hint"]
+    rec["identity_inferred"] = ident
     t_h = time.perf_counter()
     cands = harvest(model, {
         "pdf_sha256": model["pdf_sha256"],
