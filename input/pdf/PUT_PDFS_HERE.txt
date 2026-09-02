@@ -1,0 +1,2 @@
+Put official announcement PDFs in this folder, then run run_harvest.bat.
+Do not write into D:\StockOptionResearch.

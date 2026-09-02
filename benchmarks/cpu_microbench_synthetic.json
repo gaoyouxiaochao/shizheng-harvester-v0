@@ -1,0 +1,20 @@
+{
+  "probe": "synthetic_cpu_only_hardware_microbench",
+  "not_a_case_benchmark": true,
+  "device_used": "cpu",
+  "gpu_seconds_if_used": null,
+  "gpu_model": null,
+  "peak_vram_mb": null,
+  "average_gpu_utilization_if_available": null,
+  "batch_size": 1,
+  "pages_processed": 2,
+  "documents_processed": 1,
+  "cpu_seconds": {
+    "sha256": 4.3e-05,
+    "native_text": 0.00588,
+    "table_find": 0.005983
+  },
+  "sha256": "68d47392b2e79afa6e9037fb3769a624d6514e63180409b0c8cae0cab0538979",
+  "word_boxes": 26,
+  "tables_found": 0
+}

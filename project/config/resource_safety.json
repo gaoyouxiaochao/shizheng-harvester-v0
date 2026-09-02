@@ -1,0 +1,35 @@
+{
+  "policy_id": "RESOURCE_SAFETY_V1",
+  "policy_version": "1.0.0",
+  "defaults": {
+    "max_docs_parallel": 2,
+    "max_gpu_jobs_parallel": 1,
+    "max_ocr_vlm_pages_parallel": 2,
+    "leave_cpu_core_idle": true,
+    "min_ram_free_ratio": 0.25,
+    "min_gpu_vram_free_ratio": 0.20,
+    "gpu_temp_pause_c": 80,
+    "max_retries_per_document": 1,
+    "retry_backoff_seconds": 2.0,
+    "unbounded_worker_pools": false,
+    "overnight_infinite_retries": false,
+    "recursive_scan_d_drive": false,
+    "path_allowlist": [
+      "D:\\\\grok-pdf-处理",
+      "/workspace/grok-pdf-处理"
+    ],
+    "require_single_doc_smoke_before_batch_gt": 2,
+    "require_two_doc_mini_batch_before_full": true,
+    "sample_interval_seconds": 0.5,
+    "throttle_sleep_seconds": 1.0,
+    "max_consecutive_throttles": 30,
+    "pause_if_unresponsive": true
+  },
+  "host_notes": {
+    "this_sandbox_cpu_count": 2,
+    "this_sandbox_effective_docs_parallel": 1,
+    "reason": "leave_cpu_core_idle on a 2-vCPU host caps document workers at 1 even though the policy default is 2.",
+    "gpu_jobs_effective": 0,
+    "reason_gpu": "No GPU in this sandbox; GPU semaphore stays at 0."
+  }
+}
