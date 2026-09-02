@@ -460,12 +460,14 @@ def run_controlled_batch() -> dict[str, Any]:
     gate = BatchGate()
     records = [r for r in discover_local_pdfs() if r.get("source_path")]
     if not records:
-        msg = {
+        from harvest.reports import rebuild
+        rebuild()
+        return {
             "ok": False,
-            "error": "input/pdf is empty. Copy official PDFs into that folder, then run again.",
+            "error": "input/pdf is empty",
+            "documents_processed": 0,
+            "candidate_total": 0,
         }
-        print(json.dumps(msg, ensure_ascii=False, indent=2))
-        raise SystemExit(2)
     run_id = "run_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     results = []
 
